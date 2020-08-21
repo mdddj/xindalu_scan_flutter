@@ -6,8 +6,7 @@ class XindaluScanFlutter {
   static const MethodChannel _channel =
       const MethodChannel('xindalu_scan_flutter');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
+  static Future<void> get init async {
+    await _channel.invokeMethod('init');
   }
 }

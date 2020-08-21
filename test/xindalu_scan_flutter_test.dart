@@ -17,7 +17,6 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await XindaluScanFlutter.platformVersion, '42');
+  test('init', () async {
   });
 }

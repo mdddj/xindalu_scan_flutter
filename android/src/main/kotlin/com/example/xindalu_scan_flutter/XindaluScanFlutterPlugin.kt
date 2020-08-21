@@ -1,53 +1,97 @@
 package com.example.xindalu_scan_flutter
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
 import androidx.annotation.NonNull;
+import androidx.core.content.edit
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-/** XindaluScanFlutterPlugin */
-public class XindaluScanFlutterPlugin: FlutterPlugin, MethodCallHandler {
-  /// The MethodChannel that will the communication between Flutter and native Android
-  ///
-  /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-  /// when the Flutter Engine is detached from the Activity
-  private lateinit var channel : MethodChannel
+public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
+    private val TAG = "XindaluScanFlutterPlugin"
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "xindalu_scan_flutter")
-    channel.setMethodCallHandler(this);
-  }
+    private lateinit var channel: MethodChannel
 
-  // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-  // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-  // plugin registration via this function while apps migrate to use the new Android APIs
-  // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-  //
-  // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-  // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-  // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-  // in the same class.
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "xindalu_scan_flutter")
-      channel.setMethodCallHandler(XindaluScanFlutterPlugin())
+    //上下文(lateinit表示等一下我会初始化这个属性,可以省略初始化为null)
+    private lateinit var context: Context
+
+    //安卓持久化功能
+    private lateinit var sharedPreferences: SharedPreferences
+
+    //和flutter通讯渠道,需要靠它返回数据给flutter app
+    private lateinit var eventChannel : EventChannel
+
+
+    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+
+        //获取插件和flutter app通讯的key
+        val flutterAppChannelName : String = sharedPreferences.getString("flutterAppChannelName","default")
+
+        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "xindalu_scan_flutter")
+        channel.setMethodCallHandler(this);
+        context = flutterPluginBinding.applicationContext //在这里获取上下文
+        sharedPreferences = context.getSharedPreferences("scan_config", Context.MODE_PRIVATE)//本地持久化
+        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,flutterAppChannelName)
+        eventChannel.setStreamHandler(ScanDataStreamHandler(context,sharedPreferences))
     }
-  }
 
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "getPlatformVersion") {
-      result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
-      result.notImplemented()
+    companion object {
+        @JvmStatic
+        fun registerWith(registrar: Registrar) {
+            val channel = MethodChannel(registrar.messenger(), "xindalu_scan_flutter")
+            channel.setMethodCallHandler(XindaluScanFlutterPlugin())
+        }
     }
-  }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-  }
+    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        if (call.method == "init") {
+            //获取参数配置
+            init(call)
+
+
+        } else {
+            result.notImplemented()
+        }
+    }
+
+    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
+    }
+
+    //初始化
+    fun init(call: MethodCall) {
+
+        //获取所需参数
+        var action: String? = call.argument("action") //广播输出action
+        var code1: String? = call.argument("extra1")//条码1
+        var code2: String? = call.argument("extra2")//条码2
+        var barcodeType: String? = call.argument("codeType") //码类型
+
+        var flutterAppChannelName : String? = call.argument("channelName") //通道名称,支持自定义
+
+        //设置默认值
+        if (action == null) action = "nlscan.action.SCANNER_RESULT"
+        if (code1 == null) code1 = "SCAN_BARCODE1"
+        if (code2 == null) code2 = "SCAN_BARCODE2"
+        if (barcodeType == null) barcodeType = "SCAN_BARCODE_TYPE"
+        if(flutterAppChannelName==null) flutterAppChannelName = "default"
+
+        //本地持久化
+        sharedPreferences.edit {
+          putString("action",action)
+          putString("code1",code1)
+          putString("code2",code2)
+          putString("barcode_type",barcodeType)
+          putString("flutterAppChannelName",flutterAppChannelName)
+        }
+
+        Log.d(TAG,"新大陆扫描配置初始化成功")
+    }
 }
