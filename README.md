@@ -6,7 +6,7 @@
 
 # 初始化
 
-// [`key`]表示flutter app 和原生通道的一个连接约定字符串,可以随便取
+[`key`]表示flutter app 和原生通道的一个连接约定字符串,可以随便取
 ```dart
   static const String key = 'xindalukey';//自定义key
   static const EventChannel _eventChannel = EventChannel(key);
@@ -14,7 +14,11 @@
 
 然后在`initState` 初始化
 ```dart
-await XindaluScanFlutter.init(config);
+await XindaluScanFlutter.init(config); // 如果不配置,将使用官方默认值
+```
+使用默认配置
+```dart
+await XindaluScanFlutter.init(Map()); 
 ```
 
 `config`可选配置
@@ -25,7 +29,7 @@ await XindaluScanFlutter.init(config);
     config["flutterAppChannelName"] = key; //上面的key
     config['barcodeType'] = "SCAN_BARCODE_TYPE";//对应下面的麻汁类型
 ```
-![1598007060674.jpg](https://static.saintic.com/picbed/huang/2020/08/21/1598007060674.jpg)
+![1598007067774.jpg](https://static.saintic.com/picbed/huang/2020/08/21/1598007067774.jpg)
 
 # 监听扫描数据
 在需要获取到扫描数据的页面,声明周期`initState`监听
