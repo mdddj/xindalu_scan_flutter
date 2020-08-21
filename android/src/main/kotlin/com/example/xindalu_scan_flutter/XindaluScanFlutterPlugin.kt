@@ -30,15 +30,15 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
 
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-
-        //获取插件和flutter app通讯的key
-        val flutterAppChannelName : String = sharedPreferences.getString("flutterAppChannelName","default")
-
         channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "xindalu_scan_flutter")
         channel.setMethodCallHandler(this);
         context = flutterPluginBinding.applicationContext //在这里获取上下文
         sharedPreferences = context.getSharedPreferences("scan_config", Context.MODE_PRIVATE)//本地持久化
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,flutterAppChannelName)
+        Log.d(TAG,"context:${context==null} , sharedPreferences:${sharedPreferences==null}")
+        //获取插件和flutter app通讯的key
+        val flutterAppChannelName : String = sharedPreferences.getString("flutterAppChannelName","default")
+        Log.d(TAG,"$flutterAppChannelName")
+        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,"111")
         eventChannel.setStreamHandler(ScanDataStreamHandler(context,sharedPreferences))
     }
 
@@ -54,7 +54,6 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         if (call.method == "init") {
             //获取参数配置
             init(call)
-
 
         } else {
             result.notImplemented()
@@ -73,15 +72,10 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         var code1: String? = call.argument("extra1")//条码1
         var code2: String? = call.argument("extra2")//条码2
         var barcodeType: String? = call.argument("codeType") //码类型
+        Log.d(TAG,"action:$action , code1:$code1 , code2:$code2 , barcodeType:$barcodeType")
 
         var flutterAppChannelName : String? = call.argument("channelName") //通道名称,支持自定义
 
-        //设置默认值
-        if (action == null) action = "nlscan.action.SCANNER_RESULT"
-        if (code1 == null) code1 = "SCAN_BARCODE1"
-        if (code2 == null) code2 = "SCAN_BARCODE2"
-        if (barcodeType == null) barcodeType = "SCAN_BARCODE_TYPE"
-        if(flutterAppChannelName==null) flutterAppChannelName = "default"
 
         //本地持久化
         sharedPreferences.edit {

@@ -15,19 +15,26 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-
+  static const EventChannel _eventChannel = EventChannel('111');
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    Map<String, dynamic> map = Map();
+    map["extra1"] = "code1";
+    map["extra2"] = "code2";
+    map["flutterAppChannelName"] = "111";
+    init(map);
+    _eventChannel.receiveBroadcastStream().listen((value) {
+      print("获取到扫描头数据>>>>>>>>>>$value");
+    });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
+  Future<void> init(Map<String, dynamic> config) async {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      await XindaluScanFlutter.init;
+      await XindaluScanFlutter.init(config);
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
