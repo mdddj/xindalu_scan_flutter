@@ -38,7 +38,7 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         //获取插件和flutter app通讯的key
         val flutterAppChannelName : String = sharedPreferences.getString("flutterAppChannelName","default")
         Log.d(TAG,"$flutterAppChannelName")
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,"111")
+        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,flutterAppChannelName)
         eventChannel.setStreamHandler(ScanDataStreamHandler(context,sharedPreferences))
     }
 

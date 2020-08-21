@@ -14,8 +14,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  static const EventChannel _eventChannel = EventChannel('111');
+  static const String key = 'xindalukey'; //自定义key
+  static const EventChannel _eventChannel = EventChannel(key);
+
   @override
   void initState() {
     super.initState();
@@ -23,6 +24,7 @@ class _MyAppState extends State<MyApp> {
     map["extra1"] = "code1";
     map["extra2"] = "code2";
     map["flutterAppChannelName"] = "111";
+    map['barcodeType'] = "SCAN_BARCODE_TYPE";
     init(map);
     _eventChannel.receiveBroadcastStream().listen((value) {
       print("获取到扫描头数据>>>>>>>>>>$value");
@@ -43,10 +45,6 @@ class _MyAppState extends State<MyApp> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
@@ -57,7 +55,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Text('Running is ok'),
         ),
       ),
     );
