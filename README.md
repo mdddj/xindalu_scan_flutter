@@ -29,7 +29,7 @@ await XindaluScanFlutter.init(Map());
     config["flutterAppChannelName"] = key; //上面的key
     config['barcodeType'] = "SCAN_BARCODE_TYPE";//对应下面的麻汁类型
 ```
-![1598007067774.jpg](https://static.saintic.com/picbed/huang/2020/08/21/1598007067774.jpg)
+![1598057630218.jpg](https://static.saintic.com/picbed/huang/2020/08/22/1598057630218.jpg)
 
 # 监听扫描数据
 在需要获取到扫描数据的页面,声明周期`initState`监听
