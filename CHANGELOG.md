@@ -1,3 +1,7 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* 初始版本更新,完成基本功能
+
+## 0.0.3
+
+* bug修复,优化代码

@@ -13,7 +13,7 @@ dependencies:
 定义参数
 ```dart
   static const String KEY = 'xindalu_scan';//自定义key,固定值,修改会启动报错
-  static const EventChannel _eventChannel = EventChannel(key);
+  static const EventChannel _eventChannel = EventChannel(KEY);
 ```
 
 然后在`initState` 初始化
@@ -42,12 +42,6 @@ await XindaluScanFlutter.init(Map());
     });
 ```
 
-## 常见问题
-1. 引入插件后报错
-```dart
-I/flutter (31823): MissingPluginException(No implementation found for method listen on channel xindalu_scan/send)
-```
-初始化一下就行了
 
 
 # 附件
