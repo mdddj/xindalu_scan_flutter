@@ -5,7 +5,7 @@
 ## 安装
 ```dart
 dependencies:
-  xindalu_scan_flutter: ^0.0.1
+  xindalu_scan_flutter: ^0.0.3
 ```
 
 # 初始化
