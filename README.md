@@ -41,3 +41,5 @@ await XindaluScanFlutter.init(Map());
 
 # 附件
 [新大陆官方文档](http://www.nlscan.com/UpLoad/Video/%E6%96%B0%E5%A4%A7%E9%99%86Android%E6%97%A0%E7%BA%BF%E6%95%B0%E6%8D%AE%E7%BB%88%E7%AB%AF%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-V1.4.pdf)
+
+待更新
