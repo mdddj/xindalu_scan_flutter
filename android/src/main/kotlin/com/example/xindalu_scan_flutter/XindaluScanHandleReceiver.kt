@@ -30,7 +30,7 @@ class XindaluScanHandleReceiver(private val event: EventChannel.EventSink?, priv
             val code1: String? = intent.getStringExtra(CODE1_KEY)
             val code2: String? = intent.getStringExtra(CODE2_KEY)
             val barcodeType: Int = intent.getIntExtra(BARCODE_KEY, -1)
-            val scanState: String = intent.getStringExtra(SCAN_STATE_KEY)
+            val scanState: String? = intent.getStringExtra(SCAN_STATE_KEY)
             if (scanState == "ok") {
                 //成功
                 val map = mapOf("code1" to code1, "code2" to code2, "barcodeType" to barcodeType, "scanState" to scanState)
