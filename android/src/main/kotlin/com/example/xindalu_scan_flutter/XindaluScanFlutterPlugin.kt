@@ -34,9 +34,8 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(this);
         context = flutterPluginBinding.applicationContext //在这里获取上下文
         sharedPreferences = context.getSharedPreferences("scan_config", Context.MODE_PRIVATE)//本地持久化
-        Log.d(TAG,"context:${context==null} , sharedPreferences:${sharedPreferences==null}")
         //获取插件和flutter app通讯的key
-        val flutterAppChannelName : String = sharedPreferences.getString("flutterAppChannelName","default")
+        val flutterAppChannelName : String = sharedPreferences.getString("flutterAppChannelName","xindalu_scan")
         Log.d(TAG,"$flutterAppChannelName")
         eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,flutterAppChannelName)
         eventChannel.setStreamHandler(ScanDataStreamHandler(context,sharedPreferences))
@@ -74,16 +73,12 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         var barcodeType: String? = call.argument("codeType") //码类型
         Log.d(TAG,"action:$action , code1:$code1 , code2:$code2 , barcodeType:$barcodeType")
 
-        var flutterAppChannelName : String? = call.argument("channelName") //通道名称,支持自定义
-
-
         //本地持久化
         sharedPreferences.edit {
           putString("action",action)
           putString("code1",code1)
           putString("code2",code2)
           putString("barcode_type",barcodeType)
-          putString("flutterAppChannelName",flutterAppChannelName)
         }
 
         Log.d(TAG,"新大陆扫描配置初始化成功")
