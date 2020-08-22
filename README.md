@@ -10,9 +10,9 @@ dependencies:
 
 # 初始化
 
-[`key`]表示flutter app 和原生通道的一个连接约定字符串,可以随便取
+定义参数
 ```dart
-  static const String key = 'xindalukey';//自定义key
+  static const String KEY = 'xindalu_scan';//自定义key,固定值,修改会启动报错
   static const EventChannel _eventChannel = EventChannel(key);
 ```
 
@@ -25,13 +25,12 @@ await XindaluScanFlutter.init(config); // 如果不配置,将使用官方默认�
 await XindaluScanFlutter.init(Map()); 
 ```
 
-`config`可选配置
+`config`只能自定义这3个参数,其他修改无效,不过这也够用了
 ```dart
     Map<String, dynamic> config = Map();
     config["extra1"] = "code1";//对应下面的条码1Extra
     config["extra2"] = "code2"; //对应下面的条码2Extra
-    config["flutterAppChannelName"] = key; //上面的key
-    config['barcodeType'] = "SCAN_BARCODE_TYPE";//对应下面的麻汁类型
+    config['barcodeType'] = "SCAN_BARCODE_TYPE";//对应下面的码制类型
 ```
 ![1598057630218.jpg](https://static.saintic.com/picbed/huang/2020/08/22/1598057630218.jpg)
 
