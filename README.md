@@ -2,7 +2,11 @@
 
 新大陆手持设备红外扫描识别插件by_flutter
 
-## Getting Started
+## 安装
+```dart
+dependencies:
+  xindalu_scan_flutter: ^0.0.1
+```
 
 # 初始化
 
