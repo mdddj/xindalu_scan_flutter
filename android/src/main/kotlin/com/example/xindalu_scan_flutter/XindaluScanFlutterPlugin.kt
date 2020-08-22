@@ -28,16 +28,16 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
     //和flutter通讯渠道,需要靠它返回数据给flutter app
     private lateinit var eventChannel : EventChannel
 
+    ///监听通道的名称,唯一key
+    private val CHANNEL_NAME : String = "xindalu_scan"
+
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "xindalu_scan_flutter")
         channel.setMethodCallHandler(this);
         context = flutterPluginBinding.applicationContext //在这里获取上下文
         sharedPreferences = context.getSharedPreferences("scan_config", Context.MODE_PRIVATE)//本地持久化
-        //获取插件和flutter app通讯的key
-        val flutterAppChannelName : String = sharedPreferences.getString("flutterAppChannelName","xindalu_scan")
-        Log.d(TAG,"$flutterAppChannelName")
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,flutterAppChannelName)
+        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,CHANNEL_NAME)
         eventChannel.setStreamHandler(ScanDataStreamHandler(context,sharedPreferences))
     }
 
