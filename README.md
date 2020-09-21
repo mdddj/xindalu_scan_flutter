@@ -10,36 +10,74 @@ dependencies:
 
 # 初始化
 
-定义参数
-```dart
-  static const String KEY = 'xindalu_scan';//自定义key,固定值,修改会启动报错
-  static const EventChannel _eventChannel = EventChannel(KEY);
-```
 
-然后在`initState` 初始化
+# 使用例子
 ```dart
-await XindaluScanFlutter.init(config); // 如果不配置,将使用官方默认值
-```
-使用默认配置
-```dart
-await XindaluScanFlutter.init(Map()); 
-```
+import 'dart:convert';
 
-`config`只能自定义这3个参数,其他修改无效,不过这也够用了
-```dart
-    Map<String, dynamic> config = Map();
-    config["extra1"] = "code1";//对应下面的条码1Extra
-    config["extra2"] = "code2"; //对应下面的条码2Extra
-    config['barcodeType'] = "SCAN_BARCODE_TYPE";//对应下面的码制类型
-```
-![1598057630218.jpg](https://static.saintic.com/picbed/huang/2020/08/22/1598057630218.jpg)
+import 'package:flutter/material.dart';
+import 'dart:async';
 
-# 监听扫描数据
-在需要获取到扫描数据的页面,声明周期`initState`监听
-```dart
+import 'package:flutter/services.dart';
+import 'package:xindalu_scan_flutter/constant.dart';
+import 'package:xindalu_scan_flutter/xindalu_result_model.dart';
+import 'package:xindalu_scan_flutter/xindalu_scan_flutter.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+
+  static const EventChannel _eventChannel = EventChannel(Constant.CHANNEL_NAME);
+
+  @override
+  void initState() {
+    super.initState();
+    init();
     _eventChannel.receiveBroadcastStream().listen((value) {
-      print("获取到扫描头数据>>>>>>>>>>$value");
+      try{
+        XindaluDataResultModel result = XindaluDataResultModel.fromJson(json.decode(value));
+        print("条码值:${result.code1}");
+        print("状态:${result.scanState}"); // ok 成功  fail 失败
+        print("条码类型:${result.scanBarcodeType}"); // -1 表示未知类型
+      }catch(e,s){
+          print(e);
+          print(s);
+      }
     });
+  }
+  // 初始化
+  Future<void> init({Map<String, String> config}) async {
+
+    await XindaluScanFlutter.init();
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('新大陆手持设备示例'),
+        ),
+        body: Center(
+          child: MaterialButton(
+            onPressed: () {  },
+            child: Text("新大陆扫码示例"),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 ```
 
 
