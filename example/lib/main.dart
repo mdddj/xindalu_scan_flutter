@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:xindalu_scan_flutter/constant.dart';
+import 'package:xindalu_scan_flutter/xindalu_result_model.dart';
 import 'package:xindalu_scan_flutter/xindalu_scan_flutter.dart';
 
 void main() {
@@ -14,37 +18,31 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static const String key = 'xindalukey'; //自定义key
-  static const EventChannel _eventChannel = EventChannel(key);
+
+
+  static const EventChannel _eventChannel = EventChannel(Constant.CHANNEL_NAME);
 
   @override
   void initState() {
     super.initState();
-    Map<String, dynamic> map = Map();
-    map["extra1"] = "code1";
-    map["extra2"] = "code2";
-    map["flutterAppChannelName"] = "111";
-    map['barcodeType'] = "SCAN_BARCODE_TYPE";
-    init(map);
+    init();
     _eventChannel.receiveBroadcastStream().listen((value) {
-      print("获取到扫描头数据>>>>>>>>>>$value");
+      try{
+        XindaluDataResultModel result = XindaluDataResultModel.fromJson(json.decode(value));
+        print("条码值:${result.code1}");
+        print("状态:${result.scanState}"); // ok 成功  fail 失败
+        print("条码类型:${result.scanBarcodeType}"); // -1 表示未知类型
+      }catch(e,s){
+          print(e);
+          print(s);
+      }
     });
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> init(Map<String, dynamic> config) async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      await XindaluScanFlutter.init(config);
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+  Future<void> init({Map<String, String> config}) async {
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
+    await XindaluScanFlutter.init();
+
   }
 
   @override
@@ -55,7 +53,10 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running is ok'),
+          child: MaterialButton(
+            onPressed: () {  },
+            child: Text("新大陆扫码示例"),
+          ),
         ),
       ),
     );

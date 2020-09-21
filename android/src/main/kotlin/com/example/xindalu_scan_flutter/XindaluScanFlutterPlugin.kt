@@ -26,10 +26,12 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var sharedPreferences: SharedPreferences
 
     //和flutter通讯渠道,需要靠它返回数据给flutter app
-    private lateinit var eventChannel : EventChannel
+    private lateinit var eventChannel: EventChannel
+
+    private lateinit var scanDataStreamHandler: ScanDataStreamHandler
 
     ///监听通道的名称,唯一key
-    private val CHANNEL_NAME : String = "xindalu_scan"
+    private val CHANNEL_NAME: String = "xindalu_scan"
 
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
@@ -37,8 +39,9 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         channel.setMethodCallHandler(this);
         context = flutterPluginBinding.applicationContext //在这里获取上下文
         sharedPreferences = context.getSharedPreferences("scan_config", Context.MODE_PRIVATE)//本地持久化
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger,CHANNEL_NAME)
-        eventChannel.setStreamHandler(ScanDataStreamHandler(context,sharedPreferences))
+        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
+        scanDataStreamHandler = ScanDataStreamHandler(context, sharedPreferences)
+        eventChannel.setStreamHandler(scanDataStreamHandler)
     }
 
     companion object {
@@ -71,16 +74,17 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         var code1: String? = call.argument("extra1")//条码1
         var code2: String? = call.argument("extra2")//条码2
         var barcodeType: String? = call.argument("codeType") //码类型
-        Log.d(TAG,"action:$action , code1:$code1 , code2:$code2 , barcodeType:$barcodeType")
+        Log.d(TAG, "广播输出action : $action , 条码1Extra : $code1 , 条码2Extra : $code2 , 码制类型Extra : $barcodeType")
+        Log.d(TAG, "注意:如果获取不到数据,请核对以上数据和手机端配置信息是否一致!")
 
         //本地持久化
         sharedPreferences.edit {
-          putString("action",action)
-          putString("code1",code1)
-          putString("code2",code2)
-          putString("barcode_type",barcodeType)
+            putString("action", action)
+            putString("code1", code1)
+            putString("code2", code2)
+            putString("barcode_type", barcodeType)
         }
 
-        Log.d(TAG,"新大陆扫描配置初始化成功")
+        Log.d(TAG, "success !! 新大陆扫描配置初始化成功")
     }
 }

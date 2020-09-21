@@ -23,5 +23,4 @@ class ScanDataStreamHandler(var context: Context,var sharedPreferences: SharedPr
         context.unregisterReceiver(xindaluScanHandleReceiver)
     }
 
-
 }
