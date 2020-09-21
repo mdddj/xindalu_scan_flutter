@@ -9,7 +9,40 @@ dependencies:
 ```
 
 # 初始化
+```dart
 
+     static const EventChannel _eventChannel = EventChannel(Constant.CHANNEL_NAME);
+     StreamSubscription _streamSubscription;
+
+     Future<void> init({Map<String, String> config}) async {
+       await XindaluScanFlutter.init();
+     }
+
+     @override
+      void initState() {
+
+        // 初始化
+        init();
+
+        // 监听扫描数据
+        _streamSubscription = _eventChannel.receiveBroadcastStream().listen((value) {
+          try{
+            XindaluDataResultModel result = XindaluDataResultModel.fromJson(json.decode(value));
+            print("条码值:${result.code1}");  // 123456789
+            print("状态:${result.scanState}"); // ok 成功  fail 失败
+            print("条码类型:${result.scanBarcodeType}"); // -1 表示未知类型
+          }catch(e,s){
+              print(e);
+              print(s);
+          }
+        });
+      }
+
+      @override
+      void dispose() {
+        _streamSubscription.cancel();
+      }
+```
 
 # 使用例子
 ```dart
@@ -36,12 +69,13 @@ class _MyAppState extends State<MyApp> {
 
 
   static const EventChannel _eventChannel = EventChannel(Constant.CHANNEL_NAME);
+  StreamSubscription _streamSubscription;
 
   @override
   void initState() {
     super.initState();
     init();
-    _eventChannel.receiveBroadcastStream().listen((value) {
+   _streamSubscription = _eventChannel.receiveBroadcastStream().listen((value) {
       try{
         XindaluDataResultModel result = XindaluDataResultModel.fromJson(json.decode(value));
         print("条码值:${result.code1}");
@@ -53,11 +87,10 @@ class _MyAppState extends State<MyApp> {
       }
     });
   }
-  // 初始化
+
+  //初始化
   Future<void> init({Map<String, String> config}) async {
-
     await XindaluScanFlutter.init();
-
   }
 
   @override
@@ -65,7 +98,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('新大陆手持设备示例'),
+          title: const Text('Plugin example app'),
         ),
         body: Center(
           child: MaterialButton(
@@ -76,7 +109,14 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription.cancel();
+  }
 }
+
 
 ```
 

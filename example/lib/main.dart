@@ -21,12 +21,13 @@ class _MyAppState extends State<MyApp> {
 
 
   static const EventChannel _eventChannel = EventChannel(Constant.CHANNEL_NAME);
+  StreamSubscription _streamSubscription;
 
   @override
   void initState() {
     super.initState();
     init();
-    _eventChannel.receiveBroadcastStream().listen((value) {
+   _streamSubscription = _eventChannel.receiveBroadcastStream().listen((value) {
       try{
         XindaluDataResultModel result = XindaluDataResultModel.fromJson(json.decode(value));
         print("条码值:${result.code1}");
@@ -39,10 +40,9 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  //初始化
   Future<void> init({Map<String, String> config}) async {
-
     await XindaluScanFlutter.init();
-
   }
 
   @override
@@ -60,5 +60,11 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription.cancel();
   }
 }
