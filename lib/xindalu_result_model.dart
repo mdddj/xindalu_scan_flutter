@@ -16,9 +16,9 @@ class XindaluDataResultModel {
     this.scanState,
   });
 
-  int scanBarcodeType;
-  String code1;
-  String scanState;
+  int? scanBarcodeType;
+  String? code1;
+  String? scanState;
 
   factory XindaluDataResultModel.fromJson(Map<String, dynamic> json) => XindaluDataResultModel(
     scanBarcodeType: json["barcodeType"],

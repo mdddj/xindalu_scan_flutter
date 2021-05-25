@@ -26,7 +26,7 @@ class XindaluScanFlutter {
   ///
   ///   详细文档github:https://github.com/mdddj/xindalu_scan_flutter
   ///
-  static Future<void> init({Map<String, dynamic> config}) async {
+  static Future<void> init({Map<String, dynamic>? config}) async {
     await _channel.invokeMethod('init', config ?? Constant.defaultConfig);
   }
 }

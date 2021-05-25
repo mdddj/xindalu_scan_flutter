@@ -1,10 +1,10 @@
 name: xindalu_scan_flutter
 description: 新大陆手持设备红外扫描识别插件by_flutter
-version: 0.0.5
+version: 1.0.0
 homepage: https://github.com/mdddj/xindalu_scan_flutter
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=1.10.0"
 
 dependencies:

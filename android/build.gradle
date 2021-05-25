@@ -2,6 +2,9 @@ group 'com.example.xindalu_scan_flutter'
 version '1.0-SNAPSHOT'
 
 buildscript {
+    ext {
+        defaultVersionCode = 1.0
+    }
     ext.kotlin_version = '1.4.10'
     repositories {
         google()
@@ -25,7 +28,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 26
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
