@@ -21,7 +21,7 @@ class XindaluScanHandleReceiver(private val event: EventChannel.EventSink?, priv
         val CODE1_KEY = sharedPreferences.getString("code1", "SCAN_BARCODE1")
         val CODE2_KEY = sharedPreferences.getString("code2", "SCAN_BARCODE2")
         val BARCODE_KEY = sharedPreferences.getString("barcode_type", "SCAN_BARCODE_TYPE")
-        var SCAN_STATE_KEY = "SCAN_STATE" //扫描结果状态 fail或ok
+        val SCAN_STATE_KEY = "SCAN_STATE" //扫描结果状态 fail或ok
 
         Log.d("Receiver"," CODE1_KEY:$CODE1_KEY , CODE2_KEY:$CODE2_KEY , BARCODE_KEY:$BARCODE_KEY")
         //取值
@@ -39,11 +39,11 @@ class XindaluScanHandleReceiver(private val event: EventChannel.EventSink?, priv
                 event.success(resultJsonString)
             } else {
                 //失败
-                event.error("10000", "扫描超时", "请重新扫描");
+                event.error("10000", "扫描超时", "请重新扫描")
             }
         }else{
             //失败
-            event?.error("10000", "扫描超时", "请重新扫描");
+            event?.error("10000", "扫描超时", "请重新扫描")
         }
 
     }

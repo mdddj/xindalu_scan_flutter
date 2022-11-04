@@ -2,10 +2,7 @@ package com.example.xindalu_scan_flutter
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
-import androidx.annotation.NonNull;
 import androidx.core.content.edit
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
@@ -14,7 +11,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
+class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
     private val TAG = "XindaluScanFlutterPlugin"
 
     private lateinit var channel: MethodChannel
@@ -34,7 +31,7 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
     private val CHANNEL_NAME: String = "xindalu_scan"
 
 
-    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "xindalu_scan_flutter")
         channel.setMethodCallHandler(this);
         context = flutterPluginBinding.applicationContext //在这里获取上下文
@@ -52,7 +49,7 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "init") {
             //获取参数配置
             init(call)
@@ -62,7 +59,7 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         }
     }
 
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel.setMethodCallHandler(null)
     }
 
@@ -70,13 +67,10 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
     fun init(call: MethodCall) {
 
         //获取所需参数
-        var action: String? = call.argument("action") //广播输出action
-        var code1: String? = call.argument("extra1")//条码1
-        var code2: String? = call.argument("extra2")//条码2
-        var barcodeType: String? = call.argument("codeType") //码类型
-        Log.d(TAG, "广播输出action : $action , 条码1Extra : $code1 , 条码2Extra : $code2 , 码制类型Extra : $barcodeType")
-        Log.d(TAG, "注意:如果获取不到数据,请核对以上数据和手机端配置信息是否一致!")
-
+        val action: String? = call.argument("action") //广播输出action
+        val code1: String? = call.argument("extra1")//条码1
+        val code2: String? = call.argument("extra2")//条码2
+        val barcodeType: String? = call.argument("codeType") //码类型
         //本地持久化
         sharedPreferences.edit {
             putString("action", action)
@@ -84,7 +78,5 @@ public class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
             putString("code2", code2)
             putString("barcode_type", barcodeType)
         }
-
-        Log.d(TAG, "success !! 新大陆扫描配置初始化成功")
     }
 }
