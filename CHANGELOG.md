@@ -1,3 +1,7 @@
+# 2.0.0
+
+* 升级gradle到7.xx,这个版本开始需要flutter版本3.3.7+
+
 # 1.0.1
  compileSdkVersion to 30
 
