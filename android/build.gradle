@@ -1,3 +1,4 @@
+
 group 'com.example.xindalu_scan_flutter'
 version '1.0-SNAPSHOT'
 
@@ -5,14 +6,14 @@ buildscript {
     ext {
         defaultVersionCode = 1.0
     }
-    ext.kotlin_version = '1.7.20'
+    ext.kotlin_version = '2.2.21'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:8.13.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -28,7 +29,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 36
+    namespace "com.example.xindalu_scan_flutter"
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -40,12 +42,15 @@ android {
         disable 'InvalidPackage'
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        compileOptions {
+            jvmTarget = "17"
+        }
     }
+
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.13.2'
 
 
     /**
@@ -58,5 +63,5 @@ dependencies {
 
         语法糖插件,去掉会报错
      */
-    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "androidx.core:core-ktx:1.17.0"
 }

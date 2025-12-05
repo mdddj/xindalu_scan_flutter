@@ -9,10 +9,8 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
-
+private const val CHANNEL_NAME: String = "xindalu_scan"
 class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
-    private val TAG = "XindaluScanFlutterPlugin"
 
     private lateinit var channel: MethodChannel
 
@@ -28,12 +26,12 @@ class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var scanDataStreamHandler: ScanDataStreamHandler
 
     ///监听通道的名称,唯一key
-    private val CHANNEL_NAME: String = "xindalu_scan"
+
 
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), "xindalu_scan_flutter")
-        channel.setMethodCallHandler(this);
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "xindalu_scan_flutter")
+        channel.setMethodCallHandler(this)
         context = flutterPluginBinding.applicationContext //在这里获取上下文
         sharedPreferences = context.getSharedPreferences("scan_config", Context.MODE_PRIVATE)//本地持久化
         eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
@@ -41,13 +39,6 @@ class XindaluScanFlutterPlugin : FlutterPlugin, MethodCallHandler {
         eventChannel.setStreamHandler(scanDataStreamHandler)
     }
 
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), "xindalu_scan_flutter")
-            channel.setMethodCallHandler(XindaluScanFlutterPlugin())
-        }
-    }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "init") {

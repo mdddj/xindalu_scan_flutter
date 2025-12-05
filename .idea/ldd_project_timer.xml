@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="LddProjectTimer">
+    <option name="dateStatistics">
+      <map>
+        <entry key="2025-02-13">
+          <value>
+            <list>
+              <TimerStateModel>
+                <option name="dateFormat" value="2025-02-13 11:56:23" />
+                <option name="name" value="xindalu_scan_flutter" />
+                <option name="startDateFormat" value="2025-02-13 11:56:23" />
+                <option name="date" value="1739418983911" />
+              </TimerStateModel>
+              <TimerStateModel>
+                <option name="dateFormat" value="2025-02-13 11:56:28" />
+                <option name="name" value="xindalu_scan_flutter" />
+                <option name="seconds" value="3" />
+                <option name="startDateFormat" value="2025-02-13 11:56:24" />
+                <option name="date" value="1739418988044" />
+              </TimerStateModel>
+              <TimerStateModel>
+                <option name="dateFormat" value="2025-02-13 11:56:28" />
+                <option name="name" value="xindalu_scan_flutter" />
+                <option name="startDateFormat" value="2025-02-13 11:56:24" />
+                <option name="date" value="1739418988045" />
+              </TimerStateModel>
+              <TimerStateModel>
+                <option name="dateFormat" value="2025-02-13 11:56:28" />
+                <option name="name" value="xindalu_scan_flutter" />
+                <option name="startDateFormat" value="2025-02-13 11:56:24" />
+                <option name="date" value="1739418988045" />
+              </TimerStateModel>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
