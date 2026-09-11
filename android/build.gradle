@@ -6,15 +6,13 @@ buildscript {
     ext {
         defaultVersionCode = 1.0
     }
-    ext.kotlin_version = '2.2.21'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.13.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.android.tools.build:gradle:9.0.0'
     }
 }
 
@@ -26,27 +24,28 @@ rootProject.allprojects {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 36
+    compileSdk = 36
     namespace "com.example.xindalu_scan_flutter"
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
     defaultConfig {
-        minSdkVersion 16
+        minSdk = 16
     }
-    lintOptions {
+    lint {
         disable 'InvalidPackage'
     }
-    kotlinOptions {
-        compileOptions {
-            jvmTarget = "17"
-        }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
 }
 
 dependencies {

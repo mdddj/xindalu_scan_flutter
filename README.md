@@ -2,10 +2,16 @@
 
 新大陆手持设备红外扫描识别插件by_flutter
 
+## Android 构建要求
+
+4.0.0 起要求 Flutter >=3.47.0、Dart >=3.12.0 <4.0.0、AGP >=9.0.0 和 JDK >=17；example 使用 Gradle 9.2.1。
+宿主应用需要移除 `kotlin-android` / `org.jetbrains.kotlin.android`，并在宿主的 `android/gradle.properties` 中设置 `android.builtInKotlin=true`。
+所有依赖插件也需要兼容内置 Kotlin。example 暂时保留 `android.newDsl=false`，用于 Flutter 的旧 Android DSL 过渡兼容。
+
 ## 安装
 ```dart
 dependencies:
-  xindalu_scan_flutter: ^1.0.0
+  xindalu_scan_flutter: ^4.0.0
 ```
 
 # 初始化
